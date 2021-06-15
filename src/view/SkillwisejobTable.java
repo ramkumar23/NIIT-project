@@ -22,21 +22,21 @@ public class SkillwisejobTable extends JFrame{
 		Statement stmt=conn.createStatement();
 		frame=new JFrame();   
 		JTable table=new JTable();
-		DefaultTableModel model = new DefaultTableModel(new String[]{"EJId","EmployeeId", "JobId", "Recruited"}, 0);
-		PreparedStatement pst=conn.prepareStatement("select employeeid,skillid from empskill where skillid");
-		pst.setString(1,k);
+		DefaultTableModel model = new DefaultTableModel(new String[] {"jobtitle","jobdescription","salary","active"}, 0);
+		model.addRow(new Object[] {"JOBTILE","JOBDESCRIPTION","SALARY","ACTIVE"});
+		PreparedStatement pst= conn.prepareStatement("select jobtitle,jobdescription,salary,active from Job where KeySkill=?");
+	    pst.setString(1,k);
+	    
 		ResultSet rst=pst.executeQuery();
-		if(rst!=null) {
-			if(rst.next()) {
-			    int a = rst.getInt("skillId");
-			    String b = rst.getString("skillName");
-			  
-			   
-			    model.addRow(new Object[]{a,b});
-			}
-		}
+		while (rst.next()) {
+			String a = rst.getString("jobtitle");
+			String b = rst.getString("jobdescription");
+			String c= rst.getString("salary");
+			String d=rst.getString("active");
+			model.addRow(new Object[] { a, b , c, d });
+			table.setModel(model);
 		
-		table.setModel(model);
+		}
 	    container=getContentPane();
 	    setLayoutManger();
 	    JScrollPane sp=new JScrollPane(table);  
