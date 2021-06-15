@@ -22,21 +22,21 @@ public class SkillwiseempTable extends JFrame{
 		Statement stmt=conn.createStatement();
 		frame=new JFrame();   
 		JTable table=new JTable();
-		DefaultTableModel model = new DefaultTableModel(new String[]{"EJId","EmployeeId", "JobId", "Recruited"}, 0);
-		PreparedStatement pst=conn.prepareStatement("select * from employee where empid=(select employeeid from empskill where =?");
-		pst.setString(1,k);
+		DefaultTableModel model = new DefaultTableModel(new String[] { "firstname", "secondname","roles","gender", "active" }, 0);
+		model.addRow(new Object[] { "FIRST NAME", "LAST NAME","ROLES","GENDER","ACTIVE" });
+		PreparedStatement pst= conn.prepareStatement("select * from Employee where empId in(select EmployeeId from EmpSkill where SkillId in(select SkillId from Skill where SkillName=?))");
+	   	pst.setString(1, k);
+	    
 		ResultSet rst=pst.executeQuery();
-		if(rst!=null) {
-			if(rst.next()) {
-			    int a = rst.getInt("skillId");
-			    String b = rst.getString("skillName");
-			  
-			   
-			    model.addRow(new Object[]{a,b});
-			}
+		while (rst.next()) {
+			String a = rst.getString("firstname");
+			String b = rst.getString("lastname");
+			String c= rst.getString("role");
+			String d=rst.getString("gender");
+			String e=rst.getString("active");
+			model.addRow(new Object[] { a, b , c, d, e });
+			table.setModel(model);
 		}
-		
-		table.setModel(model);
 	    container=getContentPane();
 	    setLayoutManger();
 	    JScrollPane sp=new JScrollPane(table);  
